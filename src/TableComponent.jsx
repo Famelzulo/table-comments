@@ -16,6 +16,7 @@ const TableComponent = () => {
   const [charCount, setCharCount] = useState(0);
   const [lastSaved, setLastSaved] = useState(null);
   const [showSaved, setShowSaved] = useState(false);
+  const [showRequired, setShowRequired] = useState(false);
 
   // Para expandir filas
   const expandedRowRender = (record) => {
@@ -41,20 +42,20 @@ const TableComponent = () => {
   };
 
   const handleSave = () => {
-    if (comment.trim() !== '') {
-      const now = new Date();
-      setLastSaved(now);
-      setShowSaved(true);
-      setTimeout(() => {
-        setShowSaved(false);
-        setSelectedRow(null);
-      }, 1000);
+    if (comment.trim() === '') {
+      setShowRequired(true);
+      return;
     }
+    const now = new Date();
+    setLastSaved(now);
+    setShowSaved(true);
+    setShowRequired(false);
   };
 
   const handleClear = () => {
     setComment('');
     setCharCount(0);
+    setShowRequired(false);
   };
 
   const columns = [
@@ -223,20 +224,21 @@ const TableComponent = () => {
                 onChange={(e) => {
                   setComment(e.target.value);
                   setCharCount(e.target.value.length);
+                  if (showRequired) setShowRequired(false);
                 }}
                 placeholder=""
                 className="obs-textarea"
               />
               <div className="obs-footer">
                 <span className="obs-count">{charCount}/500</span>
-                {comment.trim() === '' && <span className="obs-error">Este campo es obligatorio.</span>}
+                {showRequired && <span className="obs-error">Este campo es obligatorio.</span>}
               </div>
               {showSaved && lastSaved && (
                 <div className="obs-saved">Último guardado: {formatDate(lastSaved)}</div>
               )}
               <div className="obs-actions">
                 <Button onClick={handleClear} className="obs-btn-clear">Limpiar</Button>
-                <Button type="primary" onClick={handleSave} disabled={comment.trim() === ''} className="obs-btn-save">Guardar</Button>
+                <Button type="primary" onClick={handleSave} className="obs-btn-save">Guardar</Button>
               </div>
             </div>
           )}

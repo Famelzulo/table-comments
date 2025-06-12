@@ -153,7 +153,6 @@ const TableComponent = () => {
       <Header className="custom-header">
         <Row align="middle" justify="space-between">
           <Col>
-            <img src="/logo192.png" alt="Logo" style={{ height: 40, marginRight: 16 }} />
             <span className="header-title">Sector: OT - Presidencia Consejo Ministros</span>
           </Col>
           <Col>
